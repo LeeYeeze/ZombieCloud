@@ -38,7 +38,26 @@ var server = net.createServer(function(connectionListener) {
 
 		});
 
-    });   
+    }); 
+	
+	connectionListener.on('close', function(){});
+	
+	connectionListener.on('error', function() {
+        console.log('disconnected');
+        that.getConnections(function(err, count) {
+        	if (err) {
+            	console.log('Error getting connections');
+        	} else {
+            	console.log('Connections count: ' + count);
+            	tcpconnections.remove(connectionListener);
+            	connectionListener.end();
+            	reset();
+			}
+
+		});
+
+    });
+
     //Write to the connected socket
     //connectionListener.write('heyyo\r\n');
 	

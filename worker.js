@@ -117,8 +117,8 @@ function HandleClientMessage(ID, Message)
             else{
                 C.Car =
                 {
-                    X: Math.random() * (320 - 118),
-                    Y: Math.random() * (480-118),
+                    X: Math.random() * (320-50),
+                    Y: Math.random() * (480-100),
                     VX: 0,
                     VY: 0,
                     OR: 0,
@@ -194,10 +194,10 @@ setInterval(function()
 					
 					Cars.push(C.Car);
 				
-					if (C.KeysPressed==37) {C.Car.OR =4; C.Car.VX=-0.3; C.Car.VY=0;}
-					else if (C.KeysPressed==39) {C.Car.OR =6; C.Car.VX=0.3; C.Car.V=0;}
-					else if (C.KeysPressed==38) {C.Car.OR =2; C.Car.VX=0; C.Car.VY=-0.3;}
-					else if (C.KeysPressed==40) {C.Car.OR =0; C.Car.VX=0; C.Car.VY=0.3}
+					if (C.KeysPressed==37) {C.Car.OR =4; C.Car.VX=-1; C.Car.VY=0;}
+					else if (C.KeysPressed==39) {C.Car.OR =6; C.Car.VX=1; C.Car.V=0;}
+					else if (C.KeysPressed==38) {C.Car.OR =2; C.Car.VX=0; C.Car.VY=-1;}
+					else if (C.KeysPressed==40) {C.Car.OR =0; C.Car.VX=0; C.Car.VY=1}
 					else {C.Car.VX=0; C.Car.VY=0;}
 				}
 				

@@ -3,7 +3,6 @@ var Cars=[];
 var MyCar=[];
 var Socket=[];
 var GameFrameTime=20;
-var Radius=118;
 var GameTimer=null;
 var KEY_CODES={37:'left', 38:'up', 39:'right', 40:'down', 32:'fire'};
 var keys=[];
@@ -82,7 +81,7 @@ function resetSocket(start, mode)
             {
                 // Supposing MyCar is not null, which it shouldn't be if we're
                 // participating in the game and communicating with the server.
-                var maxVel=0.3;
+                var maxVel=1;
                 if (MyCar)
                 {
                     // Turn and accelerate the car locally, while we wait for the server
@@ -167,27 +166,53 @@ function DrawGame()
     GraphicsContext.font = "12pt Arial";
     GraphicsContext.fillStyle = "red";
     GraphicsContext.textAlign = "center";
+	var myX;
+	var myY;
+	
     for (var i = 0; i < Cars.length; i++)
     {
         var layer=0;
         var frame=0;
-        if(Cars[i].OR>=4)
+        if(Cars[i].OR==4)
         {
-            layer=1;
-            frame=Cars[i].OR-4;
+            frame=0;
         }
-        else
+        if(Cars[i].OR==6)
         {
-            layer=0;
-            frame=Cars[i].OR;
+            frame=1;
+        }
+		if(Cars[i].OR==2)
+        {
+            frame=2;
+        }
+		if(Cars[i].OR==0)
+        {
+            frame=3;
         }
         GraphicsContext.drawImage(CarImage,
-            0 + frame*118,
-            0 +layer* 118,
-            118, 118,
+            0 + frame*100,
+            0,
+            100, 200,
             Math.floor(Cars[i].X), Math.floor(Cars[i].Y),
-            118, 118);
-
+            50, 100);
+			
+		if (Cars[i] == MyCar)
+		{
+			myX=Cars[i].X;
+			myY=Cars[i].Y;
+		}
+	}
+	
+	GraphicsContext.fillStyle = "#A9A9A9";
+	GraphicsContext.fillRect(0,0,BattleField.width,myY-100);
+	GraphicsContext.fillRect(0,0,myX-100,BattleField.height);
+	GraphicsContext.fillRect(0,myY+200,BattleField.width,BattleField.height-myY-200);
+	GraphicsContext.fillRect(myX+150,0,BattleField.width-myX-150,BattleField.height);
+	
+	GraphicsContext.fillStyle = "red";
+	
+	for (var i = 0; i < Cars.length; i++)
+    {
         if (Cars[i].Name) GraphicsContext.fillText((Cars[i] == MyCar ? "Me" : Cars[i].Name.substring(0, 10)), Cars[i].X | 0, Cars[i].Y | 0);
     }
 }
