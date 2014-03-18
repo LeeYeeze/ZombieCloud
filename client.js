@@ -30,7 +30,7 @@ function resetSocket(start, mode)
     catch (E) { Socket[start] = null; return false; }
     Socket[start].onerror=null;
     Socket[start].onerror = function(E) {
-        if(start+1>=hostArray.length)
+        /*if(start+1>=hostArray.length)
             alert("WebSocket error: " + JSON.stringify(E));
         else{
             //Socket[start].close();
@@ -51,7 +51,7 @@ function resetSocket(start, mode)
                 }
                 catch (E) { Socket[start] = null; return false; }
             }
-        }
+        }*/
     };
     Socket[start].onclose=null;
     Socket[start].onclose = function (E)
