@@ -169,30 +169,51 @@ function DrawGame()
 	var myX;
 	var myY;
 	
+	GraphicsContext.fillStyle = "#A9A9A9";
+	GraphicsContext.fillRect(0,0,BattleField.width,BattleField.height);
+	
+	for (var i = 0; i < Cars.length; i++)
+    {			
+		if (Cars[i] == MyCar)
+		{
+			myX=Cars[i].X;
+			myY=Cars[i].Y;
+		}
+	}
+	
+	GraphicsContext.save();
+	
+	GraphicsContext.beginPath();
+	GraphicsContext.arc(myX+25,myY+50,100,0,Math.PI*2,false);
+	GraphicsContext.clip();
+	
+	GraphicsContext.fillStyle = "#000000";
+	GraphicsContext.fillRect(0,0,BattleField.width,BattleField.height);
+	
     for (var i = 0; i < Cars.length; i++)
     {
         var layer=0;
         var frame=0;
         if(Cars[i].OR==4)
         {
-            frame=0;
+            frame=1;
         }
         if(Cars[i].OR==6)
         {
-            frame=1;
+            frame=2;
         }
 		if(Cars[i].OR==2)
         {
-            frame=2;
+            frame=3;
         }
 		if(Cars[i].OR==0)
         {
-            frame=3;
+            frame=0;
         }
         GraphicsContext.drawImage(CarImage,
-            0 + frame*100,
             0,
-            100, 200,
+            0 + frame * 56,
+            40, 56,
             Math.floor(Cars[i].X), Math.floor(Cars[i].Y),
             50, 100);
 			
@@ -203,11 +224,12 @@ function DrawGame()
 		}
 	}
 	
-	GraphicsContext.fillStyle = "#A9A9A9";
-	GraphicsContext.fillRect(0,0,BattleField.width,myY-100);
-	GraphicsContext.fillRect(0,0,myX-100,BattleField.height);
-	GraphicsContext.fillRect(0,myY+200,BattleField.width,BattleField.height-myY-200);
-	GraphicsContext.fillRect(myX+150,0,BattleField.width-myX-150,BattleField.height);
+	//GraphicsContext.fillStyle = "#A9A9A9";
+	//GraphicsContext.fillRect(0,0,BattleField.width,BattleField.height);
+	//GraphicsContext.fillRect(0,0,BattleField.width,myY-100);
+	//GraphicsContext.fillRect(0,0,myX-100,BattleField.height);
+	//GraphicsContext.fillRect(0,myY+200,BattleField.width,BattleField.height-myY-200);
+	//GraphicsContext.fillRect(myX+150,0,BattleField.width-myX-150,BattleField.height);
 	
 	GraphicsContext.fillStyle = "red";
 	
@@ -215,4 +237,6 @@ function DrawGame()
     {
         if (Cars[i].Name) GraphicsContext.fillText((Cars[i] == MyCar ? "Me" : Cars[i].Name.substring(0, 10)), Cars[i].X | 0, Cars[i].Y | 0);
     }
+	
+	GraphicsContext.restore();
 }
