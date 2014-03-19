@@ -5,7 +5,7 @@ var Game = require("./game.js");
 
 var Frame = 0;
 var FramesPerGameStateTransmission = 3;
-var MaxConnections = 2;
+var MaxConnections = 10;
 var Connections = {};
 var HTTPServer = HTTP.createServer(
 			function(Request, Response)
@@ -123,7 +123,11 @@ function HandleClientMessage(ID, Message)
                     VY: 0,
                     OR: 0,
                     // Put a reasonable length restriction on usernames, which will be displayed to all players.
-                    Name: Message.Data.toString().substring(0, 10)
+                    Name: Message.Data.toString().substring(0, 10),
+					// Flag for this player being human or zombie
+					humanzombie: Math.floor(Math.random() * 2),
+					// Flag for this player being alive or not
+					alive: 1//Math.floor(Math.random() * 2)
                 };
             }
 

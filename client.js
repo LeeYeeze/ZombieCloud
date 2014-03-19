@@ -6,12 +6,16 @@ var GameFrameTime=20;
 var GameTimer=null;
 var KEY_CODES={37:'left', 38:'up', 39:'right', 40:'down', 32:'fire'};
 var keys=[];
-var CarImage=new Image();
 var BattleField;
 var hostArray=new Array("localhost:8001","localhost:8002","localhost:8003","localhost:8004");
 var index=0;
 var Name
-CarImage.src="Enemy-3-Sprite-Sheet.png";
+
+var ZombieImg=new Image();
+ZombieImg.src="Zombie-Sprite-Sheet.png";
+var HumanImg=new Image();
+HumanImg.src="Human-Sprite-Sheet.png";
+
 function resetSocket(start, mode)
 {
     try
@@ -168,6 +172,7 @@ function DrawGame()
     GraphicsContext.textAlign = "center";
 	var myX;
 	var myY;
+	var myalive;
 	
 	GraphicsContext.fillStyle = "#A9A9A9";
 	GraphicsContext.fillRect(0,0,BattleField.width,BattleField.height);
@@ -178,15 +183,16 @@ function DrawGame()
 		{
 			myX=Cars[i].X;
 			myY=Cars[i].Y;
+			myalive=Cars[i].alive;
 		}
 	}
 	
-	GraphicsContext.save();
-	
+	if(myalive==1)
+	{
+	GraphicsContext.save();	
 	GraphicsContext.beginPath();
 	GraphicsContext.arc(myX+25,myY+50,100,0,Math.PI*2,false);
-	GraphicsContext.clip();
-	
+	GraphicsContext.clip();	
 	GraphicsContext.fillStyle = "#000000";
 	GraphicsContext.fillRect(0,0,BattleField.width,BattleField.height);
 	
@@ -194,49 +200,102 @@ function DrawGame()
     {
         var layer=0;
         var frame=0;
-        if(Cars[i].OR==4)
-        {
-            frame=1;
-        }
-        if(Cars[i].OR==6)
-        {
-            frame=2;
-        }
-		if(Cars[i].OR==2)
-        {
-            frame=3;
-        }
-		if(Cars[i].OR==0)
-        {
-            frame=0;
-        }
-        GraphicsContext.drawImage(CarImage,
-            0,
-            0 + frame * 56,
-            40, 56,
-            Math.floor(Cars[i].X), Math.floor(Cars[i].Y),
-            50, 100);
-			
-		if (Cars[i] == MyCar)
+		if(Cars[i].humanzombie==0)
 		{
-			myX=Cars[i].X;
-			myY=Cars[i].Y;
+			if(Cars[i].OR==4)
+				frame=1;
+			if(Cars[i].OR==6)
+				frame=2;
+			if(Cars[i].OR==2)
+				frame=3;
+			if(Cars[i].OR==0)
+				frame=0;
+		}
+		else
+		{
+			if(Cars[i].OR==4)
+				frame=3;
+			if(Cars[i].OR==6)
+				frame=2;
+			if(Cars[i].OR==2)
+				frame=0;
+			if(Cars[i].OR==0)
+				frame=1;
+		}
+		
+		if(Cars[i].alive==1)
+		{
+			if(Cars[i].humanzombie==0)
+			{
+				GraphicsContext.drawImage(ZombieImg,0,0+frame*56,40,56,Math.floor(Cars[i].X),Math.floor(Cars[i].Y),50, 100);
+			}
+			else
+			{
+				GraphicsContext.drawImage(HumanImg,0,0+frame*64,32,64,Math.floor(Cars[i].X),Math.floor(Cars[i].Y),50, 100);
+			}
 		}
 	}
 	
-	//GraphicsContext.fillStyle = "#A9A9A9";
-	//GraphicsContext.fillRect(0,0,BattleField.width,BattleField.height);
-	//GraphicsContext.fillRect(0,0,BattleField.width,myY-100);
-	//GraphicsContext.fillRect(0,0,myX-100,BattleField.height);
-	//GraphicsContext.fillRect(0,myY+200,BattleField.width,BattleField.height-myY-200);
-	//GraphicsContext.fillRect(myX+150,0,BattleField.width-myX-150,BattleField.height);
-	
-	GraphicsContext.fillStyle = "red";
-	
+	GraphicsContext.fillStyle = "red";	
 	for (var i = 0; i < Cars.length; i++)
     {
-        if (Cars[i].Name) GraphicsContext.fillText((Cars[i] == MyCar ? "Me" : Cars[i].Name.substring(0, 10)), Cars[i].X | 0, Cars[i].Y | 0);
-    }
-	
+        if ((Cars[i].Name)&&(Cars[i].alive==1)) 
+			GraphicsContext.fillText((Cars[i] == MyCar ? "Me" : Cars[i].Name.substring(0, 10)), Cars[i].X | 0, Cars[i].Y | 0);
+    }	
 	GraphicsContext.restore();
+	}
+	else
+	{
+	GraphicsContext.fillStyle = "#000000";
+	GraphicsContext.fillRect(0,0,BattleField.width,BattleField.height);
+	
+    for (var i = 0; i < Cars.length; i++)
+    {
+        var layer=0;
+        var frame=0;
+		if(Cars[i].humanzombie==0)
+		{
+			if(Cars[i].OR==4)
+				frame=1;
+			if(Cars[i].OR==6)
+				frame=2;
+			if(Cars[i].OR==2)
+				frame=3;
+			if(Cars[i].OR==0)
+				frame=0;
+		}
+		else
+		{
+			if(Cars[i].OR==4)
+				frame=3;
+			if(Cars[i].OR==6)
+				frame=2;
+			if(Cars[i].OR==2)
+				frame=0;
+			if(Cars[i].OR==0)
+				frame=1;
+		}
+		
+		if(Cars[i].alive==1)
+		{
+			if(Cars[i].humanzombie==0)
+			{
+				GraphicsContext.drawImage(ZombieImg,0,0+frame*56,40,56,Math.floor(Cars[i].X),Math.floor(Cars[i].Y),50, 100);
+			}
+			else
+			{
+				GraphicsContext.drawImage(HumanImg,0,0+frame*64,32,64,Math.floor(Cars[i].X),Math.floor(Cars[i].Y),50, 100);
+			}
+		}
+	}
+	
+	GraphicsContext.fillStyle = "red";	
+	for (var i = 0; i < Cars.length; i++)
+    {
+        if ((Cars[i].Name)&&(Cars[i].alive==1)) 
+			GraphicsContext.fillText((Cars[i] == MyCar ? "Me" : Cars[i].Name.substring(0, 10)), Cars[i].X | 0, Cars[i].Y | 0);
+    }
+	GraphicsContext.fillStyle = "green";
+	GraphicsContext.fillText("You are dead...",BattleField.width/2,BattleField.height/2);
+	}
 }
