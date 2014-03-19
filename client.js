@@ -94,7 +94,8 @@ function resetSocket(start, mode)
                     else if(keys['right']){MyCar.VX=maxVel;MyCar.VY=0;MyCar.OR=6}
                     else if(keys['up']){MyCar.VX=0;MyCar.VY=-maxVel;MyCar.OR=2;}
                     else if(keys['down']){MyCar.VX=0;MyCar.VY=maxVel;MyCar.OR=0;}
-                    else {MyCar.VX=0; MyCar.VY=0;}
+					else if(keys['fire']){MyCar.VX=0; MyCar.VY=0; MyCar.firing=1;}
+                    else {MyCar.VX=0; MyCar.VY=0;MyCar.firing=0;}
                 }
 
                 RunGameFrame(Cars);
@@ -233,9 +234,20 @@ function DrawGame()
 			{
 				GraphicsContext.drawImage(HumanImg,0,0+frame*64,32,64,Math.floor(Cars[i].X),Math.floor(Cars[i].Y),50, 100);
 			}
+			if(Cars[i].firing==1)
+			{
+				GraphicsContext.fillStyle = "#ffff00";
+				if(Cars[i].OR==4)
+					GraphicsContext.fillRect(Cars[i].X-50,Cars[i].Y,50,100);
+				else if(Cars[i].OR==6)
+					GraphicsContext.fillRect(Cars[i].X+50,Cars[i].Y,50,100);
+				else if(Cars[i].OR==2)
+					GraphicsContext.fillRect(Cars[i].X,Cars[i].Y-100,50,100);
+				else if(Cars[i].OR==0)
+					GraphicsContext.fillRect(Cars[i].X,Cars[i].Y+100,50,100);
+			}
 		}
-	}
-	
+	}	
 	GraphicsContext.fillStyle = "red";	
 	for (var i = 0; i < Cars.length; i++)
     {
@@ -285,6 +297,18 @@ function DrawGame()
 			else
 			{
 				GraphicsContext.drawImage(HumanImg,0,0+frame*64,32,64,Math.floor(Cars[i].X),Math.floor(Cars[i].Y),50, 100);
+			}
+			if(Cars[i].firing==1)
+			{
+				GraphicsContext.fillStyle = "#ffff00";
+				if(Cars[i].OR==4)
+					GraphicsContext.fillRect(Cars[i].X-50,Cars[i].Y,50,100);
+				else if(Cars[i].OR==6)
+					GraphicsContext.fillRect(Cars[i].X+50,Cars[i].Y,50,100);
+				else if(Cars[i].OR==2)
+					GraphicsContext.fillRect(Cars[i].X,Cars[i].Y-100,50,100);
+				else if(Cars[i].OR==0)
+					GraphicsContext.fillRect(Cars[i].X,Cars[i].Y+100,50,100);
 			}
 		}
 	}

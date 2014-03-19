@@ -202,7 +202,31 @@ setInterval(function()
 					else if (C.KeysPressed==39) {C.Car.OR =6; C.Car.VX=1; C.Car.V=0;}
 					else if (C.KeysPressed==38) {C.Car.OR =2; C.Car.VX=0; C.Car.VY=-1;}
 					else if (C.KeysPressed==40) {C.Car.OR =0; C.Car.VX=0; C.Car.VY=1}
-					else {C.Car.VX=0; C.Car.VY=0;}
+					else if (C.KeysPressed==32) 
+					{
+						C.Car.VX=0; C.Car.VY=0; 
+						C.Car.firing=1;
+						var hurtx1; var hurtx2; var hurty1; var hurty2;
+						if(C.Car.OR == 4) {hurtx1 = C.Car.X-50; hurtx2 = C.Car.X; hurty1 = C.Car.Y; hurty2 = C.Car.Y+100;}
+						else if(C.Car.OR == 6) {hurtx1 = C.Car.X+50; hurtx2 = C.Car.X+100; hurty1 = C.Car.Y; hurty2 = C.Car.Y+100;}
+						else if(C.Car.OR == 2) {hurtx1 = C.Car.X; hurtx2 = C.Car.X+50; hurty1 = C.Car.Y-100; hurty2 = C.Car.Y;}
+						else if(C.Car.OR == 0) {hurtx1 = C.Car.X; hurtx2 = C.Car.X+50; hurty1 = C.Car.Y+100; hurty2 = C.Car.Y+200;}
+						
+						if(C.Car.alive==1)
+						{
+							for (var ID in Connections)
+							{
+								var C2 = Connections[ID];
+								var thiscarx = C2.Car.X + 25;
+								var thiscary = C2.Car.Y + 50;
+								if ((thiscarx>hurtx1) && (thiscarx<hurtx2) && (thiscary>hurty1) && (thiscary<hurty2) && (C.Car.humanzombie != C2.Car.humanzombie))
+								{
+									C2.Car.alive=0;
+								}
+							}
+						}
+					}
+					else {C.Car.VX=0; C.Car.VY=0;C.Car.firing=0;}
 				}
 				
 				Game.RunGameFrame(Cars);
