@@ -166,7 +166,7 @@ function HandleClientMessage(ID, Message)
 function UpdateDB(Name)
 {
 	
-	var DB = fs.readFileSync("./Database.json");
+	var DB = fs.readFileSync("./test.json");
   try { var DataBase = JSON.parse(DB); }
 	catch (Err) { return; }
 
@@ -176,7 +176,7 @@ function UpdateDB(Name)
 		DataBase[Name] += 1;	
 	}
 	
-	fs.writeFileSync("./Database.json", JSON.stringify(DataBase, null, 4));
+	fs.writeFileSync("./test.json", JSON.stringify(DataBase, null, 4));
   console.log("Database updated!" ); 
 		
 }	
