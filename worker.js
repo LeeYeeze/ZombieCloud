@@ -3,6 +3,9 @@ var HTTP = require("http");
 var WebSocketServer = require("websocket").server;
 var Game = require("./game.js");
 var fs = require('fs');
+var Memcached = require('memcached');
+var memcached = new Memcached('localhost:11211');
+var lifetime = 86400; //24hrs
 
 var Frame = 0;
 var FramesPerGameStateTransmission = 3;
@@ -136,7 +139,7 @@ function HandleClientMessage(ID, Message)
 			C.KeysPressed = 0;
 			console.log(C.Car.Name + " spawned a zombie/human!");
 			
-			UpdateDB(C.Car.Name);
+			UpdateDB(C.Car);
 						
 			SendGameState();
 			break;
@@ -163,10 +166,10 @@ function HandleClientMessage(ID, Message)
 	}
 }
 
-function UpdateDB(Name)
+function UpdateDB(oneCar)
 {
 	
-	var DB = fs.readFileSync("./Database.json");
+	/*var DB = fs.readFileSync("./Database.json");
   try { var DataBase = JSON.parse(DB); }
 	catch (Err) { return; }
 
@@ -176,8 +179,12 @@ function UpdateDB(Name)
 		DataBase[Name] += 1;	
 	}
 	
-	fs.writeFileSync("./Database.json", JSON.stringify(DataBase, null, 4));
-  console.log("Database updated!" ); 
+	fs.writeFileSync("./Database.json", JSON.stringify(DataBase, null, 4));*/
+memcached.set(oneCar.Name, {X: oneCar.X, Y: oneCar.Y, VX: oneCar.VX, VY: oneCar.VY, OR: oneCar.OR, humanzombie: oneCar.humanzombie, alive: oneCar.alive}, lifetime, function( err, result ){
+  if( err ) console.error( err );
+  console.dir( result );
+    console.log("Database updated!" );
+});
 		
 }	
 	
@@ -273,6 +280,13 @@ setInterval(function()
 				}
 				
 				Game.RunGameFrame(Cars);
+				
+				for (var ID in Connections)
+				{
+					var C = Connections[ID];
+					if (!C.Car) continue;
+					UpdateDB(C.Car);
+				}
 
 				// Increment the game frame, which is only used to time the SendGameState calls.
 				Frame = (Frame + 1) % FramesPerGameStateTransmission;
