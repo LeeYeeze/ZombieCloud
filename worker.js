@@ -117,6 +117,7 @@ function HandleClientMessage(ID, Message)
             if("Details" in Message){
                 C.Car=Message.Details;
                 C.Car.Name= Message.Data.toString().substring(0, 10);
+				RetrieveDB(C.Car);
             }
             else{
                 C.Car =
@@ -182,10 +183,25 @@ function UpdateDB(oneCar)
 	fs.writeFileSync("./Database.json", JSON.stringify(DataBase, null, 4));*/
 memcached.set(oneCar.Name, {X: oneCar.X, Y: oneCar.Y, VX: oneCar.VX, VY: oneCar.VY, OR: oneCar.OR, humanzombie: oneCar.humanzombie, alive: oneCar.alive}, lifetime, function( err, result ){
   if( err ) console.error( err );
-  console.dir( result );
-    console.log("Database updated!" );
+  //console.dir( result );
+    //console.log("Database updated!" );
 });
-		
+}
+
+function RetrieveDB(oneCar)
+{
+memcached.get(oneCar.Name, function( err, result ){
+  if( err ) console.error( err );
+  console.log( result.X );
+oneCar.X = result.X;
+oneCar.Y = result.Y; 
+oneCar.VX = result.VX; 
+oneCar.VY = result.VY;
+oneCar.OR = result.OR; 
+oneCar.humanzombie = result.humanzombie; 
+oneCar.alive = result.alive;
+});
+    console.log("Data retrieved!" );		
 }	
 	
 //	fs.readFile("./test.json", function (err, data) {
