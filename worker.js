@@ -192,7 +192,6 @@ function RetrieveDB(oneCar)
 {
 memcached.get(oneCar.Name, function( err, result ){
   if( err ) console.error( err );
-  console.log( result.X );
 oneCar.X = result.X;
 oneCar.Y = result.Y; 
 oneCar.VX = result.VX; 
@@ -201,7 +200,7 @@ oneCar.OR = result.OR;
 oneCar.humanzombie = result.humanzombie; 
 oneCar.alive = result.alive;
 });
-    console.log("Data retrieved!" );		
+    console.log("User " + oneCar.Name + " Data retrieved!" );		
 }	
 	
 //	fs.readFile("./test.json", function (err, data) {
