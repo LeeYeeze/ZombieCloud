@@ -7,7 +7,7 @@ var GameTimer=null;
 var KEY_CODES={37:'left', 38:'up', 39:'right', 40:'down', 32:'fire'};
 var keys=[];
 var BattleField;
-var hostArray=new Array("10.33.130.45:8001","10.33.130.45:8002","10.33.130.45:8003","10.33.130.45:8004");
+var hostArray=new Array("localhost:8001","localhost:8002","localhost:8003","localhost:8004");
 var index=0;
 var Name
 
